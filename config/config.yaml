@@ -1,0 +1,139 @@
+# News Agent Configuration
+
+# News Sources Configuration
+news_sources:
+  # Trusted global news sources with RSS feeds
+  sources:
+    - name: "Reuters"
+      url: "https://feeds.reuters.com/reuters/topNews"
+      category: "general"
+      reliability_score: 0.95
+      language: "en"
+      
+    - name: "BBC News"
+      url: "http://feeds.bbci.co.uk/news/rss.xml"
+      category: "general"
+      reliability_score: 0.93
+      language: "en"
+      
+    - name: "Associated Press"
+      url: "https://feeds.ap.org/ap/APTopStories"
+      category: "general"
+      reliability_score: 0.94
+      language: "en"
+      
+    - name: "The Guardian"
+      url: "https://www.theguardian.com/world/rss"
+      category: "general"
+      reliability_score: 0.90
+      language: "en"
+      
+    - name: "Al Jazeera"
+      url: "https://www.aljazeera.com/xml/rss/all.xml"
+      category: "general"
+      reliability_score: 0.88
+      language: "en"
+      
+    - name: "The New York Times"
+      url: "https://rss.nytimes.com/services/xml/rss/nyt/World.xml"
+      category: "general"
+      reliability_score: 0.92
+      language: "en"
+
+# API Configuration
+apis:
+  openai:
+    model: "gpt-4"
+    max_tokens: 1000
+    temperature: 0.3
+    
+  twilio:
+    account_sid: "${TWILIO_ACCOUNT_SID}"
+    auth_token: "${TWILIO_AUTH_TOKEN}"
+    whatsapp_number: "${TWILIO_WHATSAPP_NUMBER}"
+    
+  newsguard:
+    api_key: "${NEWSGUARD_API_KEY}"
+    enabled: true
+
+# Trend Detection Configuration
+trend_detection:
+  min_article_count: 3  # Minimum articles to consider a trend
+  time_window_hours: 24  # Time window for trend analysis
+  keyword_extraction:
+    max_keywords: 10
+    min_frequency: 2
+    
+  clustering:
+    algorithm: "dbscan"
+    eps: 0.3
+    min_samples: 2
+
+# Summarization Configuration
+summarization:
+  max_length: 200  # Maximum characters for summary
+  include_key_facts: true
+  include_source_links: true
+  confidence_threshold: 0.7
+
+# Validation Configuration
+validation:
+  cross_reference_threshold: 2  # Minimum sources for validation
+  fact_check_enabled: true
+  duplicate_detection: true
+  content_filtering:
+    enabled: true
+    blocked_keywords: []
+    sensitive_topics: []
+
+# Notification Configuration
+notifications:
+  whatsapp:
+    enabled: true
+    max_messages_per_hour: 10
+    message_format: "markdown"
+    
+  scheduling:
+    morning_briefing: "08:00"
+    evening_summary: "20:00"
+    instant_alerts: true
+    
+  user_preferences:
+    topics_of_interest: ["politics", "technology", "business", "health"]
+    frequency: "instant"  # instant, hourly, daily
+    language: "en"
+
+# System Configuration
+system:
+  log_level: "INFO"
+  max_concurrent_requests: 10
+  request_timeout: 30
+  retry_attempts: 3
+  cache_ttl: 3600  # 1 hour
+  
+  database:
+    url: "sqlite:///news_agent.db"
+    pool_size: 5
+    
+  redis:
+    host: "localhost"
+    port: 6379
+    db: 0
+    
+  monitoring:
+    sentry_dsn: "${SENTRY_DSN}"
+    health_check_interval: 300  # 5 minutes
+
+# Security Configuration
+security:
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 60
+    
+  data_retention:
+    article_retention_days: 30
+    log_retention_days: 90
+    
+  privacy:
+    anonymize_user_data: true
+    encrypt_sensitive_data: true 

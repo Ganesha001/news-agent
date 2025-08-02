@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  news-agent:
+    build: .
+    container_name: news-agent
+    restart: unless-stopped
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - DATABASE_URL=sqlite:///news_agent.db
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+      - ./.env:/app/.env:ro
+    depends_on:
+      - redis
+    networks:
+      - news-agent-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: news-agent-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - news-agent-network
+
+  # Optional: Add a web interface later
+  # web-interface:
+  #   build: ./web
+  #   container_name: news-agent-web
+  #   restart: unless-stopped
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - NEWS_AGENT_API_URL=http://news-agent:8000
+  #   depends_on:
+  #     - news-agent
+  #   networks:
+  #     - news-agent-network
+
+volumes:
+  redis_data:
+
+networks:
+  news-agent-network:
+    driver: bridge 
